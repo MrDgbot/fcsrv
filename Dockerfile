@@ -10,4 +10,4 @@ FROM ubuntu:noble-20231214
 
 LABEL org.opencontainers.image.source = "https://github.com/gngpp/fcsrv"
 COPY --from=builder /src/target/release/fcsrv /bin/fcsrv
-ENTRYPOINT [ "/bin/fcsrv"]
+ENTRYPOINT [ "/bin/fcsrv", "run"]
