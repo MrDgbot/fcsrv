@@ -11,8 +11,8 @@ Cargo.lock
 **/*.rs.bk
 
 # MSVC Windows builds of rustc generate these, which store debugging information
+*.zip
 *.pdb
-
 
 # Added by cargo
 

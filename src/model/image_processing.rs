@@ -19,7 +19,7 @@ pub fn process_pair_classifier_ans_image(
     let sub_image = image.resize_exact(
         input_shape.0,
         input_shape.1,
-        image::imageops::FilterType::Nearest,
+        image::imageops::FilterType::Lanczos3,
     );
     let normalized_vec: Vec<f32> = sub_image
         .into_rgb8()
@@ -44,7 +44,7 @@ pub fn process_pair_classifier_image(
     let sub_image = image.crop_imm(x, y, 200, 200).resize_exact(
         input_shape.0,
         input_shape.1,
-        image::imageops::FilterType::Nearest,
+        image::imageops::FilterType::Lanczos3,
     );
     let normalized_vec: Vec<f32> = sub_image
         .into_rgb8()
@@ -61,16 +61,16 @@ pub fn process_pair_classifier_image(
 
 #[inline]
 pub fn process_classifier_image(
-    image: &image::DynamicImage,
+    image: &mut image::DynamicImage,
     index: u32,
     input_shape: (u32, u32),
 ) -> Result<Array4<f32>> {
-    let target_img = crop_funcaptcha_image(image, (index / 3, index % 3), 100).resize_exact(
+    let sub_image = crop_funcaptcha_image(image, (index / 3, index % 3), 100).resize_exact(
         input_shape.0,
         input_shape.1,
-        image::imageops::FilterType::Nearest,
+        image::imageops::FilterType::Lanczos3,
     );
-    let normalized_vec: Vec<f32> = target_img
+    let normalized_vec: Vec<f32> = sub_image
         .into_rgb8()
         .into_raw()
         .into_iter()
@@ -84,11 +84,11 @@ pub fn process_classifier_image(
 }
 
 pub fn crop_funcaptcha_image(
-    image: &image::DynamicImage,
+    image: &mut image::DynamicImage,
     index: (u32, u32),
     width: u32,
 ) -> image::DynamicImage {
-    let (x, y) = (index.1 as u32 * width, index.0 as u32 * width);
+    let (x, y) = (index.1 * width, index.0 * width);
     image.crop_imm(x, y, width, width)
 }
 
